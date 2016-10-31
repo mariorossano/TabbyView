@@ -10,6 +10,10 @@
 import Foundation
 import UIKit
 
+enum TabbyViewAlign {
+    case Left, Center
+}
+
 protocol TabbyItemViewProtocol {
     func highlight()
     func unhighlight()
@@ -31,6 +35,8 @@ protocol TabbyViewDelegate {
 
 @objc(TabbyView)
 class TabbyView: UIView, UIScrollViewDelegate {
+    
+    var tabbyAlign: TabbyViewAlign?
     
     var tapGestureRecognizer: UITapGestureRecognizer?
     
@@ -247,6 +253,8 @@ class TabbyView: UIView, UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
+        let align = tabbyAlign ?? TabbyViewAlign.Center
+        
         if(titleViews.count <= 0) {
             return
         }
@@ -271,8 +279,13 @@ class TabbyView: UIView, UIScrollViewDelegate {
         }
         
         if(page < 0) {
-            
-            wrapperView.frame.origin.x = frame.width / 2 - titleViews.first!.frame.width / 2 - offset
+
+            switch align {
+            case .Center:
+                wrapperView.frame.origin.x = frame.width / 2 - titleViews.first!.frame.width / 2 - offset
+            case .Left:
+                wrapperView.frame.origin.x =  -offset
+            }
             
         }
         
@@ -280,7 +293,17 @@ class TabbyView: UIView, UIScrollViewDelegate {
             
             let relativeOffset = offset - CGFloat(page) * scrollViewWidth
             
-            wrapperView.frame.origin.x = -(wrapperView.frame.width - titleViews.last!.frame.width / 2) + frame.width/2 - relativeOffset
+            switch align {
+            
+            case .Center:
+            
+                wrapperView.frame.origin.x = -(wrapperView.frame.width - titleViews.last!.frame.width / 2) + frame.width/2 - relativeOffset
+                
+            case .Left:
+                
+                wrapperView.frame.origin.x = -(wrapperView.frame.width - titleViews.last!.frame.width) - relativeOffset
+                
+            }
             
         }
         
@@ -299,13 +322,23 @@ class TabbyView: UIView, UIScrollViewDelegate {
             let prevTitleView = titleViews[page]
             let nextTitleView = titleViews[page + 1]
             
-            itemX -= (prevTitleView.frame.width / 2)
+            switch align {
             
-            let distance = (prevTitleView.frame.width / 2) + (nextTitleView.frame.width / 2)
-            
-            itemX += (p * distance)
-            
-            wrapperView.frame.origin.x = -itemX + frame.width / 2
+            case .Center:
+                
+                itemX -= (prevTitleView.frame.width / 2)
+                let distance = (prevTitleView.frame.width / 2) + (nextTitleView.frame.width / 2)
+                itemX += (p * distance)
+                wrapperView.frame.origin.x = -itemX + frame.width / 2
+                
+            case .Left:
+                
+                itemX -= prevTitleView.frame.width
+                let distance = prevTitleView.frame.width
+                itemX += (p * distance)
+                wrapperView.frame.origin.x = -itemX
+                
+            }
             
         }
         

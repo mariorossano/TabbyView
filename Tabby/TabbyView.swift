@@ -10,8 +10,8 @@
 import Foundation
 import UIKit
 
-enum TabbyViewAlign {
-    case Left, Center
+enum TabbyViewAlign : String {
+    case Left = "LEFT", Center = "CENTER"
 }
 
 protocol TabbyItemViewProtocol {
@@ -36,7 +36,16 @@ protocol TabbyViewDelegate {
 @objc(TabbyView)
 class TabbyView: UIView, UIScrollViewDelegate {
     
-    var tabbyAlign: TabbyViewAlign?
+    var tabbyAlign = TabbyViewAlign.Center
+    
+    @IBInspectable var tabbyAlignAdapter:String {
+        get {
+            return self.tabbyAlign.rawValue
+        }
+        set( alignValue) {
+            self.tabbyAlign = TabbyViewAlign(rawValue: alignValue.uppercased()) ?? .Center
+        }
+    }
     
     var tapGestureRecognizer: UITapGestureRecognizer?
     

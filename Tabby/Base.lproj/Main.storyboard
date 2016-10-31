@@ -23,6 +23,9 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="128" id="C3h-hh-i5J"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="tabbyAlignAdapter" value="Center"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IBL-Ot-Pn3"/>
                         </subviews>
